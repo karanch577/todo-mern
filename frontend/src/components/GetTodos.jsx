@@ -30,12 +30,13 @@ export default function GetTodos() {
 
   return (
     <div>
-      <div className="grid grid-cols-5 gap-4 border">
-        <div className="border col-span-5">Your Todos</div>
+      <div className=" border w-[50vw]">
+        <div className="border">Your Todos</div>
         {todolist &&
           todolist.map((todo) => (
-            <div key={todo._id}>
+            <div className="flex items-center justify-between" key={todo._id}>
               <div className="col-span-3 ">{todo.title}</div>
+              <div className="flex text-2xl w-[60px] justify-between bg-green-300">
               <div>
                 <FiEdit
                   onClick={() => {
@@ -48,9 +49,10 @@ export default function GetTodos() {
               <div>
                 <AiTwotoneDelete onClick={() => deleteTodo(todo)}/>
               </div>
+              </div>
             </div>
           ))}
-          {showModel && <Modal setShowModel={setShowModel} clickedTodo={clickedTodo}/>}
+          {showModel && <Modal setShowModel={setShowModel} clickedTodo={clickedTodo} title="Todo"/>}
       </div>
     </div>
   );
