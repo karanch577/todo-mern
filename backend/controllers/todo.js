@@ -10,7 +10,8 @@ exports.createTodo = async(req, res) => {
     }
     try {
         const todo = await Todo.create({
-            title
+            title,
+            user: req.user._id
         })
         return res.status(200).json({
             success: true,
@@ -24,14 +25,15 @@ exports.createTodo = async(req, res) => {
 
 exports.getTodos = async(req, res) => {
     try {
-        const todos = await Todo.find()
-        if(todos) {
+        const todos = await Todo.find({user: req.user._id})
+        if(todos.length !== 0) {
             return res.status(200).json({
                 status: true,
                 message: "todos found in DB",
                 todos
             })
         }
+        throw new Error
     } catch (error) {
         return res.status(401).json({
             status: false,

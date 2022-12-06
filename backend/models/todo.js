@@ -1,4 +1,5 @@
 const mongoose = require("mongoose")
+const User = require("./user")
 
 const todoSchema = new mongoose.Schema({
     title: {
@@ -6,7 +7,11 @@ const todoSchema = new mongoose.Schema({
         required: [true, "Todo is required"],
         trim: true
     },
-    tasks: [String]
+    tasks: [String],
+    user: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: User
+    }
 },{
     timestamps: true
 })

@@ -23,6 +23,28 @@ exports.createTask = async (req, res) => {
   }
 };
 
+exports.gettasks = async (req, res) => {
+  const {id} = req.params
+  if(id !== null) {
+    try {
+      const todo = await Todo.findById(id)
+      return res.status(200).json({
+        success: "true",
+        message: "todo found in DB",
+        tasks: todo.tasks
+      })
+    } catch (error) {
+      console.log(error)
+      return res.status(401).json({
+        success: "false",
+        message: "provide the correct user id",
+      })
+    }
+  }
+ 
+  
+}
+
 exports.updateTask = async (req, res) => {
   const { id } = req.params;
   const { task, index } = req.body;

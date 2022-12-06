@@ -29,9 +29,12 @@ exports.signup = async (req, res) => {
       password: encryPassword,
     });
 
-    const token = user.createToken()
+    const token = jwt.sign({_id: user._id},process.env.SECRET, {
+      expiresIn: process.env.EXPIRY
+    })
     user.token = token;
 
+    user.password = undefined
     return res.status(201).json({
       success: true,
       message: "User successfully registered",
@@ -43,37 +46,69 @@ exports.signup = async (req, res) => {
 };
 
 exports.signin = async (req, res) => {
-    const { email, password } = req.body
-    if(!(email && password)) {
-        return res.status(401).json({
-            success: false,
-            message: "All the fields are mandatory"
-        })
+  const { email, password } = req.body;
+  if (!(email && password)) {
+    return res.status(401).json({
+      success: false,
+      message: "All the fields are mandatory",
+    });
+  }
+  // finding the user in DB
+  try {
+    const user = await User.findOne({ email });
+    if (!user) {
+      return res.status(401).json({
+        success: false,
+        message: `${email} is not registered`,
+      });
     }
-    // finding the user in DB
-    try {
-        const user = await User.findOne({email})
-        if(!user) {
-            return res.status(401).json({
-                success: false,
-                message: `${email} is not registered`
-            })
-        }
-        console.log(user.comparePassword(password))
-        if(user.comparePassword()) {
-            const token = user.createToken()
-                res.cookie("token", token, {
-                    expires: new Date(Date.now() + 2 * 24 * 60 * 60 * 1000),
-                    httpOnly: true
-                })
-            return res.status(200).json({
-                success: true,
-                user
-            })
-        }
-        
-        
-    } catch (error) {
-        console.log(error)
+    if (await bcrypt.compare(password, user.password)) {
+      const token = jwt.sign({ _id: user._id }, process.env.SECRET, {
+        expiresIn: "2h",
+      });
+      res.cookie("token", token, {
+        expires: new Date(Date.now() + 2 * 24 * 60 * 60 * 1000),
+        httpOnly: true,
+      });
+      user.password = undefined;
+      return res.status(200).json({
+        success: true,
+        user,
+      });
+    } else {
+      return res.status(401).json({
+        status: false,
+        message: "password doesn't match",
+      });
     }
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+exports.dashboard = async (req, res) => {
+  try {
+    const user = await User.findById(req.user._id);
+    user.password = undefined;
+
+    return res.status(201).json({
+        success: true,
+        message: "user is authorized",
+        user
+    });
+  } catch (error) {
+    return res.status(401).json({
+        success: false,
+        message: "invalid user id"
+    })
+  }
+};
+
+exports.signout = async (req, res) => {
+
+    res.clearCookie("token")
+    return res.status(200).json({
+        success: "true",
+        message: "User signout successfully"
+    })
 }

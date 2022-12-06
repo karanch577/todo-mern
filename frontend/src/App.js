@@ -1,16 +1,24 @@
-import CreateTodoForm from "./components/CreateTodo"
 import './App.css';
-import GetTodos from "./components/GetTodos";
-import Tasks from "./components/Tasks";
+import Login from "./pages/Login"
+import { Routes, Route} from "react-router-dom"
+import Register from './pages/Register';
+import Dashboard from './pages/Dashboard';
+import { useState } from 'react';
+import { useEffect } from 'react';
+
+
 function App() {
+  const [user, setUser] = useState(null)
+  useEffect(() => {
+
+  },[user])
   return (
     <div>
-     <h2 className="text-center text-3xl my-5">Add your Todos</h2>
-     <CreateTodoForm />
-     <div className="flex">
-     <GetTodos />
-     <Tasks />
-    </div>
+     <Routes>
+      <Route path='/' element={<Login setUser={setUser} />} />
+      <Route path='/signup' element={<Register />} />
+      <Route path='/dashboard' element={<Dashboard user={user}/>} />
+     </Routes>
     </div>
   );
 }
