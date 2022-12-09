@@ -63,7 +63,7 @@ const [inputValue, setInputValue] = useState({
             </label>
             <input
               type="submit"
-              className="w-full btn btn-primary btn-lg bg-purple-700 text-white rounded py-2"
+              className="w-full bg-purple-700 text-white rounded py-2 cursor-pointer"
               value="Sign In"
             />
           </form>

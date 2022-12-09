@@ -2,7 +2,7 @@ import axios from "axios";
 import React from "react";
 import { useState } from "react";
 
-function AddTodo() {
+function AddTodo({setShowSearch}) {
   const [input, setInput] = useState("");
 
   const data = {
@@ -17,6 +17,7 @@ function AddTodo() {
   }
   return (
     <div>
+      <p>Want to search the todos? <span className="text-purple-700 font-bold cursor-pointer" onClick={() => setShowSearch(true)}>Click here</span></p>
       <div className="flex flex-col items-center">
         <h2 className="text-2xl">Enter your Todo</h2>
         <input

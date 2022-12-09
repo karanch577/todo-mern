@@ -6,7 +6,7 @@ import AddTask from "./AddTask";
 
 import { FiEdit } from "react-icons/fi";
 import { RiDeleteBin2Line } from "react-icons/ri";
-import EditTask from "./EditTask";
+import EditTask from "./EditModal";
 
 function GetTasks({ todoId }) {
   const [tasks, setTasks] = useState([]);
@@ -20,7 +20,7 @@ function GetTasks({ todoId }) {
   useEffect(() => {
    fetchData()
    
-  }, [todoId]);
+  }, []);
 
   if (todoId == null) {
     return <div>please select any todo</div>;
@@ -72,14 +72,14 @@ function GetTasks({ todoId }) {
             
               <div className="bg-gray-100 rounded flex justify-between p-1 mt-2 h-full items-center border ml-4" key={index}>
                 <span className="title-font font-medium ml-4">- {task}</span>
-                <div className="icons flex justify-between w-[11%]">
+                <div className="icons flex justify-between w-[8%]">
                   <div className="cursor-pointer" onClick={() => {
                     setClickedIndex(index)
                     setShowModal(true)
                   }}>
                     <FiEdit />
                   </div>
-                  {showModal ? <EditTask id={todoId} index={clickedIndex} setShowModal={setShowModal} fetchData={fetchData} /> : ""}
+                  {showModal ? <EditTask id={todoId} index={clickedIndex} setShowModal={setShowModal} fetchData={fetchData} title="Task" /> : ""}
                   <div className="cursor-pointer" >
                     <RiDeleteBin2Line onClick={() => deleteTask(index)}/>
                   </div>

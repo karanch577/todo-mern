@@ -55,7 +55,7 @@ function Register() {
         <span className="block mb-1 text-xs font-medium text-gray-700">Create a password</span>
         <input className="border w-full py-1 rounded" type="password" placeholder="••••••••"onChange={(e) => setFormData({...formData, password: e.target.value})} required />
       </label>
-      <input type="submit" className="w-full btn btn-primary btn-lg bg-purple-700 text-white rounded py-2" value="Sign Up" />
+      <input type="submit" className="w-full bg-purple-700 text-white rounded py-2 cursor-pointer" value="Sign Up" />
     </form>
     
   </div>

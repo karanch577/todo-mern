@@ -45,7 +45,15 @@ exports.getTodos = async(req, res) => {
 exports.updateTodo = async(req, res) => {
     try {
         const { id } = req.params
-        const todo = await Todo.findByIdAndUpdate(id, req.body)
+        const title = req.body.task
+        // since in the frontend we are using the same modal to edit the todo and task
+        // here we are assigning task to title because in the schema we have defined as title
+        console.log(title)
+
+        const todo = await Todo.findByIdAndUpdate(id, {
+            title
+        })
+        console.log(todo)
         if(todo) {
             return res.status(200).json({
                 status: true,
@@ -78,4 +86,21 @@ exports.deleteTodo = async(req, res) => {
                 message: "todos not found in DB"
             })
         }
+}
+
+exports.searchTodos = async (req, res) => {
+    const { q } = req.query
+
+    const result = await Todo.find({
+        title: {
+            $regex: `^${q}`,
+            $options: "i"
+        }
+    })
+
+    return res.status(200).json({
+        success: true,
+        message: "Todo found",
+        result
+    })
 }

@@ -5,25 +5,30 @@ import { useState } from 'react'
 
 
 
-function EditTask({setShowModal, id, index, fetchData}) {
+function EditModal({setShowModal, id, index, fetchData, title}) {
   const [value, setValue] = useState("")
-  const [task, setTask] = useState([])
   const data = {
     task: value,
     index
   }
-  let api = `task/todo/${id}`
-  console.log(index)
+
+  let api;
+  if(title === "Task"){
+    api= `task/todo/${id}`
+  }
+  else {
+    api = `todo/${id}`
+  }
 
   const sendData = async () => {
       const response = await axios.put(api, data)
-      setTask(response.data.todo.tasks)
   }
 
   const handleClick = async (e) => {
     e.preventDefault()
     sendData()
     fetchData()
+    setValue("")
   }
   
   return (
@@ -32,7 +37,7 @@ function EditTask({setShowModal, id, index, fetchData}) {
   <div className="container px-5 py-24 mx-auto">
     <p className='absolute top-2 right-3 cursor-pointer font-bold text-xl' onClick={() => setShowModal(false)}>X</p>
     <div className="flex flex-col text-center w-full mb-12">
-      <h1 className="sm:text-3xl text-2xl font-medium title-font mb- text-gray-900">Edit Task</h1>
+      <h1 className="sm:text-3xl text-2xl font-medium title-font mb- text-gray-900">Edit {title}</h1>
       
     </div>
     <div className="lg:w-1/2 md:w-2/3 mx-auto">
@@ -57,4 +62,4 @@ function EditTask({setShowModal, id, index, fetchData}) {
   )
 }
 
-export default EditTask
+export default EditModal

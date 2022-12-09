@@ -5,10 +5,12 @@ import GetTasks from "./GetTasks";
 
 import { FiEdit } from "react-icons/fi";
 import { RiDeleteBin2Line } from "react-icons/ri";
+import EditModal from "./EditModal";
 
 function GetTodos() {
   const [todos, setTodos] = useState('');
   const [todoId, setTodoId] = useState(null)
+  const [showModal, setShowModal] = useState(false);
 
   const fetchdata = async () => {
     const res = await axios.get("gettodos")
@@ -41,12 +43,13 @@ function GetTodos() {
             <div className="p-2">
               <div className="bg-gray-100 rounded flex p-4 h-full items-center justify-between">
                 
-                <span className="title-font font-medium cursor-pointer" onClick={() => setTodoId(todo._id)}>{todo.title}</span>
+                <span className="title-font font-medium cursor-pointer w-[87%]" onClick={() => setTodoId(todo._id)}>{todo.title}</span>
                 <div>
                 <div className="icons flex justify-between ">
-                  <div className="cursor-pointer" >
+                  <div className="cursor-pointer" onClick={() => setShowModal(true)} >
                     <FiEdit />
                   </div>
+                  {showModal ? <EditModal setShowModal={setShowModal} id={todo._id} fetchData={fetchdata} title="Todo"/> : ""}
                  
                   <div className="cursor-pointer ml-4" onClick={() => deleteTodo(todo._id)} >
                     <RiDeleteBin2Line />
@@ -59,8 +62,8 @@ function GetTodos() {
         ))}
         </div>
         <div className="task grow">
-
-        {todoId ?<GetTasks todoId={todoId}/> : ""}
+          
+        {todoId ?<GetTasks todoId={todoId}/> : "Select any todo"}
         </div>
       </div>
     )
