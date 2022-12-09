@@ -3,6 +3,11 @@ const Todo = require("../models/todo");
 exports.createTask = async (req, res) => {
   const { task } = req.body;
   const { id } = req.params;
+  
+  if(id == null) {
+    return ""
+    console.log("null");
+  }
   if (!task.trim()) {
     return res.status(401).json({
       success: false,
@@ -25,7 +30,10 @@ exports.createTask = async (req, res) => {
 
 exports.gettasks = async (req, res) => {
   const {id} = req.params
-  if(id !== null) {
+  if(id == null) {
+    console.log("null");
+  }
+  else{
     try {
       const todo = await Todo.findById(id)
       return res.status(200).json({
@@ -48,12 +56,16 @@ exports.gettasks = async (req, res) => {
 exports.updateTask = async (req, res) => {
   const { id } = req.params;
   const { task, index } = req.body;
-  if (!task.trim()) {
-    return res.status(401).json({
-      success: false,
-      message: "Task is required",
-    });
+  console.log(index)
+  if(index == undefined) {
+    return ""
   }
+  // if (!task.trim()) {
+  //   return res.status(401).json({
+  //     success: false,
+  //     message: "Task is required",
+  //   });
+  
   try {
     const todo = await Todo.findById(id);
     todo.tasks[index] = task;
@@ -74,6 +86,7 @@ exports.updateTask = async (req, res) => {
 exports.deleteTask = async (req, res) => {
     const { id } = req.params;
     const { index } = req.body;
+   console.log(index)
     try {
       const todo = await Todo.findById(id);
         todo.tasks.splice(index,1)

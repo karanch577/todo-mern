@@ -1,34 +1,39 @@
 import axios from 'axios'
 import React from 'react'
 import { useState } from 'react'
-import { useEffect } from 'react'
 
-function AddItem({setShowModal, id}) {
+
+
+
+function AddTask({setShowAddModal, id, fetchData }) {
   const [value, setValue] = useState("")
   const [task, setTask] = useState([])
   const data = {
-    task: value
+    task: value,
   }
   let api = `createtask/todo/${id}`
   
 
   const sendData = async () => {
-    const response = await axios.post(api, data)
-    setTask(response.data.todo.tasks)
+      const response = await axios.post(api, data)
+      setTask(response.data.todo.tasks)
+      setValue("")
+    fetchData()
+
   }
 
   const handleClick = async (e) => {
     e.preventDefault()
     sendData()
   }
-  console.log(task)
+  
   return (
     <div>
         <section className="text-gray-600 body-font bg-gray-50 absolute right-0 left-0 top-0 bottom-0 z-10 w-[50vw] h-[50vh] m-auto rounded">
   <div className="container px-5 py-24 mx-auto">
-    <p className='absolute top-2 right-3 cursor-pointer font-bold text-xl' onClick={() => setShowModal(false)}>X</p>
+    <p className='absolute top-2 right-3 cursor-pointer font-bold text-xl' onClick={() => setShowAddModal(false)}>X</p>
     <div className="flex flex-col text-center w-full mb-12">
-      <h1 className="sm:text-3xl text-2xl font-medium title-font mb- text-gray-900">Add your</h1>
+      <h1 className="sm:text-3xl text-2xl font-medium title-font mb- text-gray-900">Add your Task</h1>
       
     </div>
     <div className="lg:w-1/2 md:w-2/3 mx-auto">
@@ -37,7 +42,7 @@ function AddItem({setShowModal, id}) {
         <div className="p-2 w-full">
           <div className="relative">
           
-            <input type="email" id="email" name="email" className="w-full bg-gray-100  rounded border border-gray-300 focus:border-indigo-500 focus:bg-white focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out" placeholder='Enter here...' onChange={(e) => setValue(e.target.value)} />
+            <input type="email" id="email" name="email" className="w-full bg-gray-100  rounded border border-gray-300 focus:border-indigo-500 focus:bg-white focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out" placeholder='Enter here...' onChange={(e) => setValue(e.target.value)} value={value} />
           </div>
         </div>
         
@@ -53,4 +58,4 @@ function AddItem({setShowModal, id}) {
   )
 }
 
-export default AddItem
+export default AddTask
