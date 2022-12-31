@@ -1,76 +1,73 @@
-import React from "react";
-import { useState, useEffect } from "react";
-import axios from "axios";
-import GetTasks from "./GetTasks";
+import axios from 'axios'
+import React from 'react'
+import { useEffect } from 'react'
+import { useState } from 'react'
+import GetTasks from './GetTasks'
 
-import { FiEdit } from "react-icons/fi";
-import { RiDeleteBin2Line } from "react-icons/ri";
-import EditModal from "./EditModal";
+import { FiEdit, FiDelete } from "react-icons/fi";
+import EditTodoModal from './EditTodoModal'
+import { useContext } from 'react'
+import TodosContext from '../context/todos/TodosContext'
+
+
+
 
 function GetTodos() {
-  const [todos, setTodos] = useState('');
-  const [todoId, setTodoId] = useState(null)
-  const [showModal, setShowModal] = useState(false);
+const [todos, setTodos] = useState(null)
+const state = useContext(TodosContext)
+console.log(todos);
 
-  const fetchdata = async () => {
-    const res = await axios.get("gettodos")
-    setTodos(res.data.todos)
+const fetchData = async () => {
+  try {
+    const { data } = await axios.get("gettodos")
+    setTodos(data.todos);
+  } catch (error) {
+    console.log(`Error in gettodos` + error)
   }
+    state.setIsTodoModified(false)
+    
+}
+useEffect(() => {
+    fetchData()
+    // eslint-disable-next-line
+},[state.isTodoModified])
 
-  useEffect(() => {
-    fetchdata()
-  },[])
-  
-  const deleteTodo = async (id) => {
+const deleteTodo = async (id) => {
     if(!id) {
       console.log("no id")
     }
     console.log(id)
-    const res = await axios.delete(`todo/${id}`) 
-      if(!res.data.success) {
-        window.location.reload()
-      }
-    
+    await axios.delete(`todo/${id}`) 
+    state.setIsTodoModified(true)
+    state.setIdToDisplayTask(null)
   }
 
-
-  if(todos.length !== 0) {
-    return (
-      <div className="flex">
-        <div className="todo w-2/5">
-        {todos.map((todo) => (
-          <div className="flex flex-col sm:mx-auto sm:mb-2 -mx-2" key={todo._id}  >
-            <div className="p-2">
-              <div className="bg-gray-100 rounded flex p-4 h-full items-center justify-between">
-                
-                <span className="title-font font-medium cursor-pointer w-[87%]" onClick={() => setTodoId(todo._id)}>{todo.title}</span>
-                <div>
-                <div className="icons flex justify-between ">
-                  <div className="cursor-pointer" onClick={() => setShowModal(true)} >
-                    <FiEdit />
-                  </div>
-                  {showModal ? <EditModal setShowModal={setShowModal} id={todo._id} fetchData={fetchdata} title="Todo"/> : ""}
-                 
-                  <div className="cursor-pointer ml-4" onClick={() => deleteTodo(todo._id)} >
-                    <RiDeleteBin2Line />
-                  </div>
-                </div>
-                </div>
+  return (
+    <div className='flex'>
+        <div className="todosList container  w-1/2">
+        {todos ? todos.map(todo => (
+            <div className='text-xl m-2 p-2 bg-gray-100 flex justify-between items-center' key={todo._id}>
+              <div className="title flex-grow cursor-pointer " onClick={() => state.setIdToDisplayTask(todo._id)}>
+                {todo.title} 
               </div>
+                
+                <div className="icons flex mx-2 w-14 justify-between">
+                    <span onClick={() => {
+                        state.setShowModal(true)
+                        state.setIdToEdit(todo._id)
+                    }}><FiEdit /></span>
+                    <span onClick={() => deleteTodo(todo._id)}><FiDelete /></span>
+                </div>
+                {state.showModal ? <EditTodoModal /> : ""}
             </div>
-          </div>
-        ))}
+        )) : "You dont have any Todo. Please add."}
         </div>
-        <div className="task grow">
-          
-        {todoId ?<GetTasks todoId={todoId}/> : "Select any todo"}
+        <div className="tasksList flex-grow">
+        <GetTasks />
+
         </div>
-      </div>
-    )
-    
-  } else {
-    return <>no todos</>
-}
+    </div>
+  )
 }
 
-export default GetTodos;
+export default GetTodos

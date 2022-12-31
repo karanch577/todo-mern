@@ -1,26 +1,30 @@
 import axios from "axios";
 import React from "react";
+import { useContext } from "react";
 import { useState } from "react";
 import { useEffect } from "react";
-import AddTask from "./AddTask";
 
 import { FiEdit } from "react-icons/fi";
 import { RiDeleteBin2Line } from "react-icons/ri";
-import EditTask from "./EditModal";
+import TodosContext from "../context/todos/TodosContext";
+import EditTodoModal from "./EditTodoModal";
 
-function GetTasks({ todoId }) {
+function GetTasks() {
   const [tasks, setTasks] = useState([]);
-  const [showModal, setShowModal] = useState(false);
-  const [showAddModal, setShowAddModal] = useState(false);
-  const [clickedIndex, setClickedIndex] = useState("")
+
+  const state = useContext(TodosContext)
+  const todoId = state.idToDisplayTask
+  console.log(todoId)
 
   const fetchData = () => {
     axios.get(`task/todo/${todoId}`).then((res) => setTasks(res.data.tasks));
+    console.log(tasks);
   }
   useEffect(() => {
    fetchData()
-   
-  }, []);
+   state.setIsTaskModified(false)
+   // eslint-disable-next-line
+  }, [todoId, state.isTaskModified]);
 
   if (todoId == null) {
     return <div>please select any todo</div>;
@@ -28,16 +32,15 @@ function GetTasks({ todoId }) {
 
   // delete task
   const deleteTask = async (index) => {
-    setShowModal(false)
+    state.setShowTaskEditModal(false)
     console.log(index)
     const data = {
       index
     }
     
-      const result = await axios.put(`task/delete/todo/${todoId}`, data)
-      fetchData()
+       await axios.put(`task/delete/todo/${todoId}`, data)
     
-    
+    state.setIsTaskModified(true)
   }
 
   if (tasks.length === 0) {
@@ -46,11 +49,11 @@ function GetTasks({ todoId }) {
         <p>You dont have added any task.</p>
         <button
           className="text-white cursor-pointer bg-purple-700 p-2 rounded"
-          onClick={() => setShowAddModal(true)}
+          onClick={() => state.setShowTaskAddModal(true)}
         >
           Add Task
         </button>
-        {showAddModal ? <AddTask id={todoId} setShowAddModal={setShowAddModal} fetchData={fetchData} /> : ""}
+        {state.showTaskAddModal ? <EditTodoModal title={"Task"} /> : ""}
       </div>
     );
   } else {
@@ -61,25 +64,25 @@ function GetTasks({ todoId }) {
           <p className="text-xl">Your Task</p>
           <button
           className="text-white cursor-pointer bg-purple-700 p-2 rounded"
-          onClick={() => setShowAddModal(true)}
+          onClick={() => state.setShowTaskAddModal(true)}
         >
           Add Task
         </button>
           </header>
          
-        {showAddModal ? <AddTask id={todoId} setShowAddModal={setShowAddModal} fetchData={fetchData} /> : ""}
+        {state.showTaskAddModal ? <EditTodoModal title={"Task"} />  : ""}
           {tasks.map((task, index) => (
             
               <div className="bg-gray-100 rounded flex justify-between p-1 mt-2 h-full items-center border ml-4" key={index}>
                 <span className="title-font font-medium ml-4">- {task}</span>
                 <div className="icons flex justify-between w-[8%]">
                   <div className="cursor-pointer" onClick={() => {
-                    setClickedIndex(index)
-                    setShowModal(true)
+                    
+                    state.setShowTaskEditModal(true)
                   }}>
                     <FiEdit />
                   </div>
-                  {showModal ? <EditTask id={todoId} index={clickedIndex} setShowModal={setShowModal} fetchData={fetchData} title="Task" /> : ""}
+                  {state.showTaskEditModal ? <EditTodoModal title={"Task"} index={index} /> : ""}
                   <div className="cursor-pointer" >
                     <RiDeleteBin2Line onClick={() => deleteTask(index)}/>
                   </div>

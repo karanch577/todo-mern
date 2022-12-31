@@ -30,10 +30,7 @@ exports.createTask = async (req, res) => {
 
 exports.gettasks = async (req, res) => {
   const {id} = req.params
-  if(id == null) {
-    console.log("null");
-  }
-  else{
+  if(id != "null") {
     try {
       const todo = await Todo.findById(id)
       return res.status(200).json({
@@ -49,6 +46,7 @@ exports.gettasks = async (req, res) => {
       })
     }
   }
+  
  
   
 }
@@ -56,7 +54,7 @@ exports.gettasks = async (req, res) => {
 exports.updateTask = async (req, res) => {
   const { id } = req.params;
   const { task, index } = req.body;
-  console.log(index)
+  console.log(typeof index)
   if(index == undefined) {
     return ""
   }

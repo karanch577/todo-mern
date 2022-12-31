@@ -1,10 +1,14 @@
 import axios from "axios";
 import React from "react";
+import { useContext } from "react";
 import { useState} from "react";
+import SearchContext from "../context/search/SearchContext";
 
-function SearchResult({ result }) {
+function SearchResult() {
   const [tasks, setTasks] = useState([]);
   const [showTask, setShowTask] = useState(false);
+
+  const state = useContext(SearchContext)
 
   const fetchData = async (id) => {
 
@@ -19,7 +23,7 @@ function SearchResult({ result }) {
       {/* todo */}
       <div className="ml-12 mt-2">
         <p className="font-semibold mb-6">Result</p>
-        {result.map((todo) => (
+        {state.result.map((todo) => (
           <h3
             className="border bg-white rounded w-[25vw] px-3 py-1 cursor-pointer"
             onClick={() => fetchData(todo._id)}

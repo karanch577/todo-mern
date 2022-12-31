@@ -1,7 +1,9 @@
 const Todo = require("../models/todo")
 
 exports.createTodo = async(req, res) => {
-    const { title } = req.body
+    const { title, tasks } = req.body
+
+    console.log(req.body.tasks);
     if(!title.trim()){
         return res.status(401).json({
             success: false,
@@ -11,11 +13,13 @@ exports.createTodo = async(req, res) => {
     try {
         const todo = await Todo.create({
             title,
-            user: req.user._id
+            user: req.user._id,
+            tasks: [...tasks]
         })
         return res.status(200).json({
             success: true,
-            message: "Todo is created"
+            message: "Todo is created",
+            todo
         })
     } catch (error) {
         console.log(error)

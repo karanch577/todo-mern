@@ -1,41 +1,63 @@
 import axios from 'axios'
 import React from 'react'
+import { useContext } from 'react'
 import { useState } from 'react'
+import TodosContext from '../context/todos/TodosContext'
 
 
 
 
-function EditModal({setShowModal, id, index, fetchData, title}) {
+function EditTodoModal({index, title}) {
   const [value, setValue] = useState("")
+  const state = useContext(TodosContext)
   const data = {
     task: value,
     index
   }
-
+  let id = state.idToDisplayTask
+ console.log(index);
   let api;
-  if(title === "Task"){
+  if(title === "Task" && index === undefined) {
+    api=`createtask/todo/${id}`
+  }else if(title === "Task"){
     api= `task/todo/${id}`
   }
   else {
     api = `todo/${id}`
   }
-
+console.log(api);
   const sendData = async () => {
-      const response = await axios.put(api, data)
+      if(title === "Task" && index === undefined){
+        console.log(api);
+        await axios.post(api, data)
+      }else {
+        console.log(api);
+        await axios.put(api, data)
+      }
   }
 
   const handleClick = async (e) => {
     e.preventDefault()
     sendData()
-    fetchData()
+    state.setIsItemModified(true)
+    if(title === "Task") {
+      state.setIsTaskModified(true)
+    } else {
+      state.setIsTodoModified(true)
+    }
     setValue("")
+    
   }
   
   return (
     <div>
         <section className="text-gray-600 body-font bg-gray-50 absolute right-0 left-0 top-0 bottom-0 z-10 w-[50vw] h-[50vh] m-auto rounded">
   <div className="container px-5 py-24 mx-auto">
-    <p className='absolute top-2 right-3 cursor-pointer font-bold text-xl' onClick={() => setShowModal(false)}>X</p>
+    <p className='absolute top-2 right-3 cursor-pointer font-bold text-xl' onClick={() => {
+      state.setShowModal(false)
+      state.setShowTaskEditModal(false)
+      state.setShowTaskAddModal(false)
+      }}>X</p>
     <div className="flex flex-col text-center w-full mb-12">
       <h1 className="sm:text-3xl text-2xl font-medium title-font mb- text-gray-900">Edit {title}</h1>
       
@@ -62,4 +84,4 @@ function EditModal({setShowModal, id, index, fetchData, title}) {
   )
 }
 
-export default EditModal
+export default EditTodoModal

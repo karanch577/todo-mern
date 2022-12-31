@@ -1,22 +1,25 @@
 import axios from "axios";
 import React from "react";
+import { useContext } from "react";
 import { useState } from "react";
+import SearchContext from "../context/search/SearchContext";
 import SearchResult from "./SearchResult";
 
-function Search({ setShowSearch }) {
+function Search() {
   const [input, setInput] = useState("");
-  const [result, setResult] = useState([])
-  const [showResult, setShowResult] = useState(false)
+  
+
+  const state = useContext(SearchContext)
 
   const searchTodos = async () => {
     const { data } = await axios.get(`todo/search?q=${input}`);
-    setResult(data.result)
+    state.setResult(data.result)
   };
 
   const handleclick = (e) => {
     e.preventDefault();
     if (input) {
-      setShowResult(true)
+      state.setShowResult(true)
       searchTodos();
     }
     setInput("")
@@ -28,7 +31,7 @@ function Search({ setShowSearch }) {
         <p
           className="absolute top-4 right-6 font-bold cursor-pointer text-xl"
           onClick={() => {
-            setShowSearch(false)
+            state.setShowSearch(false)
         }}
         >
           X
@@ -47,8 +50,8 @@ function Search({ setShowSearch }) {
         >
           Search
         </button>
-        {showResult 
-        ? <div className="self-start"><SearchResult result={result}/></div> : ""}
+        {state.showResult 
+        ? <div className="self-start"><SearchResult /></div> : ""}
       </div>
       
     </div>
