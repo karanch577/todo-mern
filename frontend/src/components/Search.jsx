@@ -12,7 +12,7 @@ function Search() {
   const state = useContext(SearchContext)
 
   const searchTodos = async () => {
-    const { data } = await axios.get(`todo/search?q=${input}`);
+    const { data } = await axios.get(`/todo/search?q=${input}`);
     state.setResult(data.result)
   };
 

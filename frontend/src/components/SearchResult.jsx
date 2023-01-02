@@ -13,7 +13,7 @@ function SearchResult() {
   const fetchData = async (id) => {
 
     setShowTask(true);
-    const res = await axios.get(`task/todo/${id}`);
+    const res = await axios.get(`/task/todo/${id}`);
 
     setTasks(res.data.tasks);
   };

@@ -19,7 +19,7 @@ console.log(todos);
 
 const fetchData = async () => {
   try {
-    const { data } = await axios.get("gettodos")
+    const { data } = await axios.get("/gettodos")
     setTodos(data.todos);
   } catch (error) {
     console.log(`Error in gettodos` + error)
@@ -37,7 +37,7 @@ const deleteTodo = async (id) => {
       console.log("no id")
     }
     console.log(id)
-    await axios.delete(`todo/${id}`) 
+    await axios.delete(`/todo/${id}`) 
     state.setIsTodoModified(true)
     state.setIdToDisplayTask(null)
   }
