@@ -17,6 +17,9 @@ app.use(cookieParser())
 app.use(cors())
 
 // routes
+app.get("/", (req, res) => {
+    res.send("server is working")
+})
 app.use("/", todoRoutes)
 app.use("/", taskRoutes)
 app.use("/user", userRoutes)
