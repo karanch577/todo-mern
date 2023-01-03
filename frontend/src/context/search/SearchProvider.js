@@ -5,6 +5,7 @@ function SearchProvider(props) {
     const [showSearch, setShowSearch] = useState(false)
     const [result, setResult] = useState([])
     const [showResult, setShowResult] = useState(false)
+    const [showError, setShowError] = useState(false)
     return (
         <SearchContext.Provider value={{
             showSearch,
@@ -12,7 +13,9 @@ function SearchProvider(props) {
             showResult,
             setShowResult,
             result,
-            setResult
+            setResult,
+            showError,
+            setShowError
         }}>
             {props.children}
         </SearchContext.Provider>

@@ -11,18 +11,17 @@ function SearchResult() {
   const state = useContext(SearchContext)
 
   const fetchData = async (id) => {
-
     setShowTask(true);
     const res = await axios.get(`/task/todo/${id}`);
-
     setTasks(res.data.tasks);
   };
-  console.log(tasks);
+
   return (
     <div className="flex items-stretch">
       {/* todo */}
       <div className="ml-12 mt-2">
         <p className="font-semibold mb-6">Result</p>
+        <p className=" font-semibold">Todo</p>
         {state.result.map((todo) => (
           <h3
             className="border bg-white rounded w-[25vw] px-3 py-1 cursor-pointer"
@@ -39,8 +38,8 @@ function SearchResult() {
         {showTask
           ? 
           tasks.length === 0 ? "Task not added" :
-          tasks.map((task) => (
-              <div>
+          tasks.map((task, index) => (
+              <div key={index}>
                 <h3 className="bg-white m-1 p-1 rounded"> - {task}</h3>
               </div>
             ))

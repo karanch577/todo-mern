@@ -10,11 +10,17 @@ const userRoutes = require("./routes/user")
 const { connectToDb } = require("./config/db")
 connectToDb()
 
+const corsConfig = {
+    origin: true,
+    credentials: true,
+  };
+  
+  app.use(cors(corsConfig));
+  app.options('*', cors(corsConfig))
 // middlewares
 app.use(express.json())
 app.use(express.urlencoded({ extended: true })) 
 app.use(cookieParser())
-app.use(cors())
 
 // routes
 app.get("/", (req, res) => {

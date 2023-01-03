@@ -8,12 +8,21 @@ import SearchResult from "./SearchResult";
 function Search() {
   const [input, setInput] = useState("");
   
-
   const state = useContext(SearchContext)
 
   const searchTodos = async () => {
-    const { data } = await axios.get(`/todo/search?q=${input}`);
-    state.setResult(data.result)
+    try {
+      const res = await axios.get(`/todo/search?q=${input}`);
+    state.setResult(res.data.result)
+    state.setShowError(false)
+   
+    } catch (error) {
+      if(error.response.data.message === "No Todo found"){
+        state.setShowError(true)
+      }
+
+    }
+    
   };
 
   const handleclick = (e) => {
@@ -50,8 +59,11 @@ function Search() {
         >
           Search
         </button>
-        {state.showResult 
-        ? <div className="self-start"><SearchResult /></div> : ""}
+        {state.showError ? "No Todo found" : 
+        state.showResult 
+        ? <div className="self-start">
+          <SearchResult />
+          </div> : ""}
       </div>
       
     </div>

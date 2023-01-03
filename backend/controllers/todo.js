@@ -101,10 +101,16 @@ exports.searchTodos = async (req, res) => {
             $options: "i"
         }
     })
-
-    return res.status(200).json({
-        success: true,
-        message: "Todo found",
-        result
-    })
+    if(result.length === 0) {
+        return res.status(401).json({
+            success: false,
+            message: "No Todo found",
+        })
+    }else {
+        return res.status(200).json({
+            success: true,
+            message: "Todo found",
+            result
+        })
+    }
 }

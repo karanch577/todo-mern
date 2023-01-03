@@ -7,8 +7,15 @@ import Search from "../components/Search";
 import SearchContext from "../context/search/SearchContext";
 import TodosProvider from "../context/todos/TodosProvider";
 
+import { useCookies } from 'react-cookie';
+
+
 function Dashboard() {
   const state = useContext(SearchContext)
+
+  const [cookies, setCookie] = useCookies(['token']);
+  console.log(cookies);
+  setCookie("token", cookies)
   return (
     <div>
       <TodosProvider>
