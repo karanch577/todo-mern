@@ -54,11 +54,12 @@ exports.updateTodo = async(req, res) => {
         // since in the frontend we are using the same modal to edit the todo and task
         // here we are assigning task to title because in the schema we have defined as title
         console.log(title)
+        console.log(id);
 
         const todo = await Todo.findByIdAndUpdate(id, {
             title
         })
-        console.log(todo)
+        // console.log(todo)
         if(todo) {
             return res.status(200).json({
                 status: true,
