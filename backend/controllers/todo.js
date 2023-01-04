@@ -3,7 +3,8 @@ const Todo = require("../models/todo")
 exports.createTodo = async(req, res) => {
     const { title, tasks } = req.body
 
-    console.log(req.body.tasks);
+    // remove empty string
+    const result = tasks.filter(el => el)
     if(!title.trim()){
         return res.status(401).json({
             success: false,
@@ -14,7 +15,7 @@ exports.createTodo = async(req, res) => {
         const todo = await Todo.create({
             title,
             user: req.user._id,
-            tasks: [...tasks]
+            tasks: [...result]
         })
         return res.status(200).json({
             success: true,

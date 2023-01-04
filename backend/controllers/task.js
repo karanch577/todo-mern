@@ -3,6 +3,7 @@ const Todo = require("../models/todo");
 exports.createTask = async (req, res) => {
   const { task } = req.body;
   const { id } = req.params;
+  console.log(task);
   
   if(id == null) {
     return ""
@@ -10,7 +11,7 @@ exports.createTask = async (req, res) => {
   }
   // remove the empty string
 
-  const result = task.filter(el => el)
+  
   if (!task.trim()) {
     return res.status(401).json({
       success: false,
@@ -19,7 +20,7 @@ exports.createTask = async (req, res) => {
   }
   try {
     const todo = await Todo.findById(id);
-    todo.tasks.push(String(result));
+    todo.tasks.push(String(task));
     todo.save();
     return res.status(200).json({
       success: true,
