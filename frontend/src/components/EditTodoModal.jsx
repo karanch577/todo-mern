@@ -15,7 +15,6 @@ function EditTodoModal({index, title}) {
     index
   }
   let id = state.idToDisplayTask
- console.log(index);
   let api;
   if(title === "Task" && index === undefined) {
     api=`/api/createtask/todo/${id}`
@@ -39,9 +38,9 @@ console.log(api);
   const handleClick = async (e) => {
     e.preventDefault()
     sendData()
-    state.setIsItemModified(true)
+    state.setIsItemModified(prev => !prev)
     if(title === "Task") {
-      state.setIsTaskModified(true)
+      state.setIsTaskModified(prev => !prev)
     } else {
       state.setIsTodoModified(true)
     }

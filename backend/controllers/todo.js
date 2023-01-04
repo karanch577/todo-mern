@@ -39,7 +39,7 @@ exports.getTodos = async(req, res) => {
         }
         throw new Error
     } catch (error) {
-        return res.status(401).json({
+        return res.status(200).json({
             status: false,
             message: "No todo found in DB"
         })

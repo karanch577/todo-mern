@@ -15,7 +15,6 @@ import TodosContext from '../context/todos/TodosContext'
 function GetTodos() {
 const [todos, setTodos] = useState(null)
 const state = useContext(TodosContext)
-console.log(todos);
 
 const fetchData = async () => {
   try {
@@ -24,7 +23,6 @@ const fetchData = async () => {
   } catch (error) {
     console.log(`Error in gettodos` + error)
   }
-    state.setIsTodoModified(false)
     
 }
 useEffect(() => {
@@ -36,10 +34,16 @@ const deleteTodo = async (id) => {
     if(!id) {
       console.log("no id")
     }
-    console.log(id)
-    await axios.delete(`/api/todo/${id}`) 
-    state.setIsTodoModified(true)
+    try {
+      await axios.delete(`/api/todo/${id}`) 
+    state.setIsTodoModified(prev => !prev)
     state.setIdToDisplayTask(null)
+    console.log(state.isTodoModified);
+  } catch (error) {
+    state.setIsTodoModified(prev => !prev)
+    console.log(error.message);
+    }
+    
   }
 
   return (

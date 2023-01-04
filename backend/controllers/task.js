@@ -8,6 +8,9 @@ exports.createTask = async (req, res) => {
     return ""
     console.log("null");
   }
+  // remove the empty string
+
+  const result = task.filter(el => el)
   if (!task.trim()) {
     return res.status(401).json({
       success: false,
@@ -16,7 +19,7 @@ exports.createTask = async (req, res) => {
   }
   try {
     const todo = await Todo.findById(id);
-    todo.tasks.push(String(task));
+    todo.tasks.push(String(result));
     todo.save();
     return res.status(200).json({
       success: true,
