@@ -7,7 +7,7 @@ import axios from "axios";
 import { CookiesProvider } from "react-cookie";
 
 
-axios.defaults.baseURL = "https://todo-41wb.onrender.com"
+
 axios.defaults.withCredentials = true;
 
 

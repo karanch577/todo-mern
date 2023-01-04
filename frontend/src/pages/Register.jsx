@@ -13,7 +13,7 @@ function Register() {
     const [redirect, setRedirect] = useState(false)
 
     const sendData = async () => {
-        const response = await axios.post("/user/signup", formData)
+        const response = await axios.post("/api/user/signup", formData)
         setRedirect(response.data.success)
     }
     const handleSubmit = (e) => {

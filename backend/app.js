@@ -5,6 +5,7 @@ const cors = require("cors")
 const todoRoutes = require("./routes/todo")
 const taskRoutes = require("./routes/task")
 const userRoutes = require("./routes/user")
+const path = require("path")
 
 // DB connection
 const { connectToDb } = require("./config/db")
@@ -23,13 +24,20 @@ app.use(express.urlencoded({ extended: true }))
 app.use(cookieParser())
 
 // routes
-app.get("/", (req, res) => {
-    res.send("server is working")
+app.use("/api", todoRoutes)
+app.use("/api", taskRoutes)
+app.use("/api/user", userRoutes)
+
+// serving the frontend
+
+app.use(express.static(path.join(__dirname, './build')))
+app.get("*", (req, res) => {
+  res.sendFile(
+    path.join(__dirname, "./build/index.html"),
+    function(err) {
+      res.status(500).send(err)
+    }
+  )
 })
-app.use("/", todoRoutes)
-app.use("/", taskRoutes)
-app.use("/user", userRoutes)
-
-
 
 module.exports = app;

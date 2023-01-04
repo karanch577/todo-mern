@@ -12,7 +12,7 @@ function Search() {
 
   const searchTodos = async () => {
     try {
-      const res = await axios.get(`/todo/search?q=${input}`);
+      const res = await axios.get(`/api/todo/search?q=${input}`);
     state.setResult(res.data.result)
     state.setShowError(false)
    

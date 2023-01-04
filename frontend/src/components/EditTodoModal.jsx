@@ -18,12 +18,12 @@ function EditTodoModal({index, title}) {
  console.log(index);
   let api;
   if(title === "Task" && index === undefined) {
-    api=`/createtask/todo/${id}`
+    api=`/api/createtask/todo/${id}`
   }else if(title === "Task"){
-    api= `/task/todo/${id}`
+    api= `/api/task/todo/${id}`
   }
   else {
-    api = `/todo/${id}`
+    api = `/api/todo/${id}`
   }
 console.log(api);
   const sendData = async () => {

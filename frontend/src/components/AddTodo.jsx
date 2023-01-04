@@ -19,7 +19,7 @@ function AddTodo() {
   }
 
   const handleclick = async () => {
-    await axios.post("/createtodo", data)
+    await axios.post("/api/createtodo", data)
     setInput("")
     window.location.reload();
 

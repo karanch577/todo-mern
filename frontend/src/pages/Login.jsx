@@ -1,7 +1,6 @@
 import axios from "axios";
 import React, { useState } from "react";
 import { Link, useNavigate} from "react-router-dom";
-
 function Login() {
 
  
@@ -14,7 +13,7 @@ const [inputValue, setInputValue] = useState({
 })
 
   var sendData = async () => {
-    const response = await axios.post("/user/signin",inputValue)
+    const response = await axios.post("/api/user/signin",inputValue)
     if(response.data.success===true){
       navigate("/dashboard")
     }

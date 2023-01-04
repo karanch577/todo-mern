@@ -17,7 +17,7 @@ function GetTasks() {
   console.log(todoId)
 
   const fetchData = () => {
-    axios.get(`/task/todo/${todoId}`).then((res) => setTasks(res.data.tasks));
+    axios.get(`/api/task/todo/${todoId}`).then((res) => setTasks(res.data.tasks));
     console.log(tasks);
   }
   useEffect(() => {
@@ -38,7 +38,7 @@ function GetTasks() {
       index
     }
     
-       await axios.put(`/task/delete/todo/${todoId}`, data)
+       await axios.put(`/api/task/delete/todo/${todoId}`, data)
     
     state.setIsTaskModified(true)
   }
